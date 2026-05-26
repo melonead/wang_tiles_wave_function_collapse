@@ -295,24 +295,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\brian\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\ADMIN\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brian\\programming_projects\\wave_function_collapse_algorithm\\wfc\\wfc.csproj",
+      "projectUniqueName": "C:\\Users\\Public\\Core\\wang_tiles_wave_function_collapse\\wfc\\wfc.csproj",
       "projectName": "wfc",
-      "projectPath": "C:\\Users\\brian\\programming_projects\\wave_function_collapse_algorithm\\wfc\\wfc.csproj",
-      "packagesPath": "C:\\Users\\brian\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brian\\programming_projects\\wave_function_collapse_algorithm\\wfc\\obj\\",
+      "projectPath": "C:\\Users\\Public\\Core\\wang_tiles_wave_function_collapse\\wfc\\wfc.csproj",
+      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Public\\Core\\wang_tiles_wave_function_collapse\\wfc\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\brian\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
+        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"

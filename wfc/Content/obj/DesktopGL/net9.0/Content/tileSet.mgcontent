@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>c:/Users/brian/programming_projects/wave_function_collapse_algorithm/wfc/Content/tileSet.png</SourceFile>
-  <SourceTime>2026-05-25T07:39:26.921807+03:00</SourceTime>
-  <DestFile>c:/Users/brian/programming_projects/wave_function_collapse_algorithm/wfc/Content/bin/DesktopGL/Content/tileSet.xnb</DestFile>
-  <DestTime>2026-05-25T15:56:17.0012304+03:00</DestTime>
+  <SourceFile>C:/Users/Public/Core/wang_tiles_wave_function_collapse/wfc/Content/tileSet.png</SourceFile>
+  <SourceTime>2026-05-25T21:07:31.7888752+03:00</SourceTime>
+  <DestFile>C:/Users/Public/Core/wang_tiles_wave_function_collapse/wfc/Content/bin/DesktopGL/Content/tileSet.xnb</DestFile>
+  <DestTime>2026-05-25T21:11:08.3442511+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T17:25:32+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

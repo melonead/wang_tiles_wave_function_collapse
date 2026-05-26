@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,8 +15,6 @@ public class Game1 : Game
     private Texture2D tileSet;
 
     private Wfc  wfcAlg;
-
-    
     
     public Game1()
     {
@@ -48,6 +47,15 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
+
+        if (!wfcAlg.isWaveCollapsed())
+        {
+            wfcAlg.propagate(wfcAlg.gd.cells[wfcAlg.leastEntropyTile]);
+        } else
+        {
+            Console.WriteLine("the wave has collapsed");
+        }
+
         
 
         base.Update(gameTime);
@@ -58,13 +66,8 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // TODO: Add your drawing code here
+        wfcAlg.visualizeWaveFunction(_spriteBatch, tileSet);
 
-        Rectangle sourceRect = new Rectangle(128, 0, 128, 128);
-        Rectangle destinationRect = new Rectangle(0, 0, 128, 128);
-
-        _spriteBatch.Begin();
-        _spriteBatch.Draw(tileSet, destinationRect, sourceRect, Color.White);
-        _spriteBatch.End();
 
         base.Draw(gameTime);
     }

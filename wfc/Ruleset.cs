@@ -6,10 +6,10 @@ namespace Ruleset;
 
 public class RuleSet
 {
-    int tilesConnectingUpMask = 0;
-    int tilesConnectingRightMask = 0;
-    int tilesConnectingDownMask = 0;
-    int tilesConnectingLeftMask = 0;
+    public int tilesConnectingUpMask = 0;
+    public int tilesConnectingRightMask = 0;
+    public int tilesConnectingDownMask = 0;
+    public int tilesConnectingLeftMask = 0;
 
     enum ConnectionBits
     {
@@ -50,22 +50,22 @@ public class RuleSet
         return (number & (1 << position)) != 0;
     }
 
-    bool isConnectedUp(int i)
+    public bool isConnectedUp(int i)
     {
         return isBitSet(i, (int) ConnectionBits.UP);
     }
 
-    bool isConnectedRight(int i)
+    public bool isConnectedRight(int i)
     {
         return isBitSet(i, (int) ConnectionBits.RIGHT);
     }
 
-    bool isConnectedDown(int i)
+    public bool isConnectedDown(int i)
     {
         return isBitSet(i, (int) ConnectionBits.DOWN);
     }
 
-    bool isConnectedLeft(int i)
+    public bool isConnectedLeft(int i)
     {
         return isBitSet(i, (int) ConnectionBits.LEFT);
     }

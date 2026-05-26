@@ -9,15 +9,18 @@ public class Grid
     public float gridWidth;
     public float gridHeight;
     public float cellSize;
-    Vector2[] cells = new Vector2[900];
-
+    public Vector2[] cells;
+    public int size = 0;
     public Grid()
     {
-        worldWidth = 600;
-        worldHeight = 600;
-        cellSize = 20;
+        worldWidth = 896;
+        worldHeight = 896;
+        cellSize = 128;
         gridWidth = worldWidth / cellSize;
         gridHeight = worldHeight / cellSize;
+
+        size = (int) (gridWidth * gridHeight);
+        cells = new Vector2[size];
 
         createCells();
     }
