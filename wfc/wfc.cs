@@ -14,11 +14,13 @@ public class Wfc
 {
 
     public Grid gd;
-    public int[] waveFunction = new int[900];
+    public int[] waveFunction;
     private RuleSet ruleSet;
     public int leastEntropyTile = 0;
+    int allPossibilitiesBitMask = 0;
+    bool waveState = false;
 
-    private int[, ] adjacentTileDisplacements = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+    private int[, ] adjacentTileDisplacements = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
 
     Random randomGen = new Random();
 
@@ -26,8 +28,9 @@ public class Wfc
     {
         gd = new Grid();
         ruleSet = new RuleSet();
+        waveFunction = new int[gd.size];
 
-        int allPossibilitiesBitMask = 0;
+        
 
         allPossibilitiesBitMask |= (1 << 15);
         for (int i = 0; i < 15; ++i)
@@ -35,7 +38,7 @@ public class Wfc
             allPossibilitiesBitMask |= (1 << i);
         }
 
-        for (int i = 0; i < 900; ++i)
+        for (int i = 0; i < gd.size; ++i)
         {
             waveFunction[i] = allPossibilitiesBitMask; // At the beginning each cell has possibility of having any of the possible 16 tiles.
         }
@@ -58,13 +61,20 @@ public class Wfc
             for (int i = 0; i < 4; ++i)
             {
                 float x = currentPosition.X + adjacentTileDisplacements[i, 0] * gd.cellSize;
-              sdfsd  float y = currentPosition.Y + adjacentTileDisplacements[i, 1] * gd.cellSize;
+                float y = currentPosition.Y + adjacentTileDisplacements[i, 1] * gd.cellSize;
                 Vector2 neighborPosition = new Vector2(x, y);
 
-                if (neighborPosition.X < 0 || neighborPosition.X > gd.worldWidth || neighborPosition.Y < 0 || neighborPosition.Y > gd.worldHeight)
+                if (neighborPosition.X < 0 || neighborPosition.X >= gd.worldWidth || neighborPosition.Y < 0 || neighborPosition.Y >= gd.worldHeight)
                 {
                     continue;
                 }
+
+                int cellTile = getIndexOfSetBit(waveFunction[index]);
+                bool a = ruleSet.isConnectedDown(waveFunction[index]);
+                bool b = ruleSet.isConnectedLeft(waveFunction[index]);
+                bool c = ruleSet.isConnectedRight(waveFunction[index]);
+                bool d = ruleSet.isConnectedUp(waveFunction[index]);
+
 
                     
 
@@ -73,29 +83,51 @@ public class Wfc
                 int beforePossibilities = waveFunction[neighborIndex];
                 // Evaluate the neighbor possibilities
 
-                if (ruleSet.isConnectedDown(waveFunction[index]))
+                if (i == 0) // up
                 {
-                    // neighbor should connect up
-                    waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingUpMask;
+                    if (ruleSet.ConnectsUp(getIndexOfSetBit(waveFunction[index])))
+                    {
+                        // neighbor should connect down
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingDownMask;
+                    } else
+                    {
+                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingDownMask;
+                    }
+                    
+                } else if (i == 1) // right
+                {
+                    if (ruleSet.ConnectsRight(getIndexOfSetBit(waveFunction[index])))
+                    {
+                        // neighbor should connect left
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingLeftMask;
+                    } else
+                    {
+                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingLeftMask;
+                    }
+                    
+                } else if (i == 2) // down
+                {
+                    if (ruleSet.ConnectsDown(getIndexOfSetBit(waveFunction[index])))
+                    {
+                        // neighbor should connect up
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingUpMask;
+                    } else
+                    {
+                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingUpMask;
+                    }
+                    
+                } else if (i == 3) // left
+                {
+                    if (ruleSet.ConnectsLeft(getIndexOfSetBit(waveFunction[index])))
+                    {
+                        // neighbor should connnect right
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingRightMask;
+                    } else
+                    {
+                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingRightMask;
+                    }
                 }
 
-                if (ruleSet.isConnectedLeft(waveFunction[index]))
-                {
-                    // neighbor should connnect right
-                    waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingRightMask;
-                }
-
-                if (ruleSet.isConnectedRight(waveFunction[index]))
-                {
-                    // neighbor should connect left
-                    waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingLeftMask;
-                }
-
-                if (ruleSet.isConnectedUp(waveFunction[index]))
-                {
-                    // neighbor should connect down
-                    waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingDownMask;
-                }
 
                 // If the neighbor possibilities have changed, push then to the stack
                 int afterPossibilities = waveFunction[neighborIndex];
@@ -109,7 +141,12 @@ public class Wfc
     }
 
     public int collapseTile(int index)
-    {
+    {   
+        if (isTileCollapsed(index) || waveFunction[index] == 0)
+        {
+            return waveFunction[index];
+        }
+
         int possibilities = waveFunction[index];
         List<int> possibleTiles = new List<int>();
 
@@ -122,44 +159,51 @@ public class Wfc
         }
 
         int ind = randomGen.Next(possibleTiles.Count);
-
-        waveFunction[index] = possibilities & (1 << possibleTiles[ind]);
+        waveFunction[index] = 1 << possibleTiles[ind];
 
         return possibleTiles[ind];
     } 
 
     public bool isWaveCollapsed()
     {
-        return false;
+        return waveState;
     }
 
-    public bool isTileCollapsed(int index)
+    public bool isTileCollapsed(int number)
     {
-        return countSetBits(index) == 1;
+        return countSetBits(number) == 1;
     }
 
-    public int countSetBits(int index)
+    public int countSetBits(int number)
     {
-        return System.Numerics.BitOperations.PopCount((uint) waveFunction[index]);
+        return System.Numerics.BitOperations.PopCount((uint) number);
     }
 
     public void visualizeWaveFunction(SpriteBatch sp, Texture2D tileSet)
     {
+        
         int leastEntropy = 9999;
+
         for (int i = 0; i < gd.size; ++i)
         {
-            int possibilitiesCount = countSetBits(i);
 
-            if (possibilitiesCount < leastEntropy)
+            waveState = isTileCollapsed(waveFunction[i]);
+
+            int possibilitiesCount = countSetBits(waveFunction[i]);
+
+            if ((possibilitiesCount <= leastEntropy) && !isTileCollapsed(waveFunction[i]) && !(waveFunction[i] == 0))
             {
                 leastEntropyTile = i;
                 leastEntropy = possibilitiesCount;
             }
 
+            leastEntropyTile = randomGen.Next(gd.size);
+            
+
             int cellTile = 0;
             if (possibilitiesCount == 1) // This tile has collapsed get the value
             {
-                cellTile = waveFunction[i];
+                cellTile = getIndexOfSetBit(waveFunction[i]);
             }
             Rectangle sourceRect = new Rectangle((int) gd.cellSize * cellTile, 0, (int) gd.cellSize, (int) gd.cellSize);
             Rectangle destinationRect = new Rectangle((int) gd.cells[i].X, (int) gd.cells[i].Y, (int) gd.cellSize, (int) gd.cellSize);
@@ -176,6 +220,19 @@ public class Wfc
         int gridY = (int) (position.Y / gd.cellSize);
 
         return (int) (gridY * gd.gridWidth + gridX);
+    }
+
+    private void printBitValueAt(int number , int position)
+    {
+        bool bitValue = ((number >> position) & 1) == 1;
+        Console.WriteLine($"Bit at position {position}: {bitValue}");
+    }
+
+    // If a tile is collapsed this gets the index of the set bit
+    // the index of the tile.
+    private int getIndexOfSetBit(int mask)
+    {
+        return System.Numerics.BitOperations.TrailingZeroCount(mask);
     }
 
 

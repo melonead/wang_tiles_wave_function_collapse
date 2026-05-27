@@ -29,6 +29,11 @@ public class Game1 : Game
         
         wfcAlg = new Wfc();
 
+        _graphics.IsFullScreen = false;
+        _graphics.PreferredBackBufferWidth = (int) wfcAlg.gd.worldWidth;
+        _graphics.PreferredBackBufferHeight = (int) wfcAlg.gd.worldHeight;
+        _graphics.ApplyChanges();
+
         base.Initialize();
     }
 

@@ -67,3 +67,4 @@ C:\Users\Public\Core\wang_tiles_wave_function_collapse\wfc\obj\Debug\net9.0\refi
 C:\Users\Public\Core\wang_tiles_wave_function_collapse\wfc\obj\Debug\net9.0\wfc.pdb
 C:\Users\Public\Core\wang_tiles_wave_function_collapse\wfc\obj\Debug\net9.0\wfc.genruntimeconfig.cache
 C:\Users\Public\Core\wang_tiles_wave_function_collapse\wfc\obj\Debug\net9.0\ref\wfc.dll
+c:\Users\brian\programming_projects\wave_function_collapse_algorithm\wfc\obj\Debug\net9.0\wfc.sourcelink.json

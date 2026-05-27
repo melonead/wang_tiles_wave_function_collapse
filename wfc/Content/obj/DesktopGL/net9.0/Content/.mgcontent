@@ -4,7 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Public/Core/wang_tiles_wave_function_collapse/wfc/Content/tileSet.png</File>
+    <File>c:/Users/brian/programming_projects/wave_function_collapse_algorithm/wfc/Content/tileSet.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
