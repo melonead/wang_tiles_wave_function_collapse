@@ -70,12 +70,6 @@ public class Wfc
                 }
 
                 int cellTile = getIndexOfSetBit(waveFunction[index]);
-                bool a = ruleSet.isConnectedDown(waveFunction[index]);
-                bool b = ruleSet.isConnectedLeft(waveFunction[index]);
-                bool c = ruleSet.isConnectedRight(waveFunction[index]);
-                bool d = ruleSet.isConnectedUp(waveFunction[index]);
-
-
                     
 
                 int neighborIndex = getIndexOfPosition(neighborPosition);
@@ -91,8 +85,10 @@ public class Wfc
                         waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingDownMask;
                     } else
                     {
-                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingDownMask;
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingDownMask;
                     }
+
+                    continue;
                     
                 } else if (i == 1) // right
                 {
@@ -102,8 +98,10 @@ public class Wfc
                         waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingLeftMask;
                     } else
                     {
-                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingLeftMask;
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingLeftMask;
                     }
+
+                    continue;
                     
                 } else if (i == 2) // down
                 {
@@ -113,8 +111,10 @@ public class Wfc
                         waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingUpMask;
                     } else
                     {
-                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingUpMask;
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingUpMask;
                     }
+
+                    continue;
                     
                 } else if (i == 3) // left
                 {
@@ -124,8 +124,10 @@ public class Wfc
                         waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesConnectingRightMask;
                     } else
                     {
-                        // waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingRightMask;
+                        waveFunction[neighborIndex] = waveFunction[neighborIndex] & ruleSet.tilesNotConnectingRightMask;
                     }
+
+                    continue;
                 }
 
 
@@ -142,7 +144,7 @@ public class Wfc
 
     public int collapseTile(int index)
     {   
-        if (isTileCollapsed(index) || waveFunction[index] == 0)
+        if (isTileCollapsed(waveFunction[index]) || waveFunction[index] == 0)
         {
             return waveFunction[index];
         }
@@ -157,6 +159,7 @@ public class Wfc
                 possibleTiles.Add(i);
             }
         }
+
 
         int ind = randomGen.Next(possibleTiles.Count);
         waveFunction[index] = 1 << possibleTiles[ind];
@@ -182,23 +185,36 @@ public class Wfc
     public void visualizeWaveFunction(SpriteBatch sp, Texture2D tileSet)
     {
         
-        int leastEntropy = 9999;
+        int collapseCummulator = 0;
+        
+        int leastEntropy = 99999;
+
+        int collapsedTilesCount = 0;
 
         for (int i = 0; i < gd.size; ++i)
         {
 
-            waveState = isTileCollapsed(waveFunction[i]);
 
+            // Gets the least entropy tile
             int possibilitiesCount = countSetBits(waveFunction[i]);
 
-            if ((possibilitiesCount <= leastEntropy) && !isTileCollapsed(waveFunction[i]) && !(waveFunction[i] == 0))
+            if ((possibilitiesCount < leastEntropy) && !isTileCollapsed(waveFunction[i]) && !(waveFunction[i] == 0))
             {
                 leastEntropyTile = i;
                 leastEntropy = possibilitiesCount;
             }
 
-            leastEntropyTile = randomGen.Next(gd.size);
-            
+            if (isTileCollapsed(waveFunction[i]))
+            {
+                collapsedTilesCount += 1;
+            }
+
+
+
+            if (isTileCollapsed(waveFunction[i]))
+            {
+                collapseCummulator += 1;
+            }
 
             int cellTile = 0;
             if (possibilitiesCount == 1) // This tile has collapsed get the value
@@ -212,6 +228,11 @@ public class Wfc
             sp.Draw(tileSet, destinationRect, sourceRect, Color.White);
             sp.End();
         }
+
+        if (collapseCummulator == gd.size)
+        {
+            waveState = true;
+        }
     }
 
     public int getIndexOfPosition(Vector2 position)
@@ -222,11 +243,6 @@ public class Wfc
         return (int) (gridY * gd.gridWidth + gridX);
     }
 
-    private void printBitValueAt(int number , int position)
-    {
-        bool bitValue = ((number >> position) & 1) == 1;
-        Console.WriteLine($"Bit at position {position}: {bitValue}");
-    }
 
     // If a tile is collapsed this gets the index of the set bit
     // the index of the tile.

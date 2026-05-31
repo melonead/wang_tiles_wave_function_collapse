@@ -56,9 +56,6 @@ public class Game1 : Game
         if (!wfcAlg.isWaveCollapsed())
         {
             wfcAlg.propagate(wfcAlg.gd.cells[wfcAlg.leastEntropyTile]);
-        } else
-        {
-            Console.WriteLine("the wave has collapsed");
         }
 
         

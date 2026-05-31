@@ -13,7 +13,7 @@ public class Grid
     public int size = 0;
     public Grid()
     {
-        worldWidth = 896;
+        worldWidth = 896 * 2;
         worldHeight = 896;
         cellSize = 128;
         gridWidth = worldWidth / cellSize;
